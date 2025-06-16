@@ -1,0 +1,46 @@
+.placarPlayer {
+    width: 15vw;
+    height: 10vh;
+    background-color: rgb(207, 206, 206);
+    border: 1px solid #fdfdfd;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: start;
+    padding: .2rem .8rem;
+}
+.playerSelect {
+    width: 15vw;
+    height: 10vh;
+    background-color: rgb(243, 181, 57);
+    border: 1px solid #fdfdfd;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: start;
+    padding: .2rem .8rem;
+}
+
+.placarPlayer > h5 {
+    color: rgb(42, 38, 38);
+    font-weight: 500;
+    font-size: .8rem;
+}
+.playerSelect > h5 {
+    color: rgba(255, 255, 255, 0.835);
+    font-weight: 500;
+    font-size: .8rem;
+}
+
+.placarPlayer > span {
+    color: black;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+.playerSelect > span {
+    color: rgb(255, 255, 255);
+    font-size: 1.3rem;
+    font-weight: 700;
+}

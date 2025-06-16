@@ -1,0 +1,33 @@
+.cardOculto, .cardRevelado, .cardSelecionado{
+    border: none;
+    border-radius: 50%;
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 2rem;
+    
+}
+:is(.cardOculto, .cardSelecionado):hover{
+    box-shadow: 0px 0px 0px 3px rgb(197, 182, 182);
+    transition: ease-in-out 200ms;
+}
+
+.cardOculto {
+    background-color: #3b3737;
+    color: transparent;
+    cursor:pointer;
+}
+
+.cardSelecionado{
+    color: #FFF;
+    background-color: rgb(243, 181, 57);
+    cursor: pointer;
+}
+.cardRevelado {
+    color: #000000;
+    background-color: rgb(207, 206, 206);
+    cursor: not-allowed;
+}

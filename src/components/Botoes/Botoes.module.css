@@ -1,0 +1,24 @@
+.btn{
+    color: #000000;
+    background-color: rgb(207, 206, 206);
+    border: none;
+    height: 3rem;
+    /* line-height: 60px; */
+    padding: 0 1rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 40px;
+}
+.btnSelect{
+    color: #FFF;
+    background-color: rgb(243, 181, 57);
+    border: none;
+    border-radius: 40px;
+    height: 3rem;
+    line-height: 30px;
+    padding: 0 20px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+}

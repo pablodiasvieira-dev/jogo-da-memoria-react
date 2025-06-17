@@ -6,7 +6,7 @@ function PlacarPlayer({nomePlayer, scorePlayer, selectPlayer, movimentosPlayer})
     <div className={selectPlayer ? styles.playerSelect : styles.placarPlayer }>
       <h5>{nomePlayer} </h5>
       <span>{scorePlayer}</span>
-      <p className={styles.movimentos}>#{movimentosPlayer} movimentos</p>
+      <p className={styles.movimentos}> {movimentosPlayer && `#${movimentosPlayer} movimento(s)`}</p>
       </div>
   )
 }

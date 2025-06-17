@@ -83,7 +83,7 @@ function Canva() {
   if (isLoading) {
     return <p>Carregando...</p>
   }
-  
+
 
   return (
     <>
@@ -117,7 +117,7 @@ function Canva() {
                 nomePlayer = {`Jogador ${jogador.id}`} 
                 scorePlayer={jogador.score} 
                 selectPlayer = {jogador.id === jogadorDaVez}
-                movimentosPlayer = {jogador.movimentos > 0 ?  jogador.movimentos : "" }
+                movimentosPlayer = {jogador.movimentos > 0 ?  jogador.movimentos : null }
                 />
             ))}
             {/* <PlacarPlayer nomePlayer = "Player 3" scorePlayer={6} selectPlayer={true}/> */}

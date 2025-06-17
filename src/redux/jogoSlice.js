@@ -40,8 +40,8 @@ const EstadoInicial = {
     cartas: 4,
     num_jogadores: 2,
     jogadores: [
-        {id: 1, score: 3},
-        {id: 2, score: 3},
+        {id: 1, score: 0},
+        {id: 2, score: 0},
     ],
     finalizaJogo: false
 }

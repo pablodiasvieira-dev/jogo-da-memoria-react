@@ -1,6 +1,6 @@
 .placarPlayer, .playerSelect{
     width: 10rem;
-    height: 10vh;
+    height: 12vh;
     border: 1px solid #fdfdfd;
     border-radius: 8px;
     display: flex;
@@ -11,8 +11,6 @@
     transition: all 0.3s ease;
     order: 1;
 }
-
-
 
 .placarPlayer {
     background-color: rgb(207, 206, 206);
@@ -41,6 +39,11 @@
     color: rgb(255, 255, 255);
     font-size: 1.3rem;
     font-weight: 700;
+}
+
+.movimentos {
+    font-size: 10px;
+    color: gray;
 }
 
 @media screen and (max-width: 399px) {

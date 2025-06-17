@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styles from './NovoJogo.module.css'
 import Botoes from '../Botoes/Botoes'
 // import { useEffect } from 'react'
+import { reiniciarJogo } from '../../redux/jogoSlice'
 
 import { useDispatch} from "react-redux"
 import { criarNovoJogo } from '../../redux/jogoSlice'
@@ -20,6 +21,7 @@ function NovoJogo ({abrirFechar, onConfirmar}) {
   const handleClickBtn = (cartas, jogadores) => {
     const valoresDoNovoJogo = {cartas:  parseInt(cartas), jogadores:  parseInt(jogadores) }
     dispatch(criarNovoJogo(valoresDoNovoJogo))
+    dispatch(reiniciarJogo())
     onConfirmar()
     
   }

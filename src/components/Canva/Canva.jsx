@@ -3,20 +3,21 @@ import Card from '../Card'
 import styles from './Canva.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import clsx from 'clsx'
-import { atribuiPonto, finalizaJogo } from '../../redux/jogoSlice'
-import { UseDispatch } from 'react-redux'
+import { atribuiPonto, contaMovimentos, finalizaJogo } from '../../redux/jogoSlice'
 import PlacarPlayer from '../Placar'
+import EndGame from './EndGame/EndGame'
 
 function Canva() {
   const dispatch = useDispatch()
-  const gridJogos = useSelector((state) => state.jogo.grid)
-  const [cartasEmSequencia, setCartasEmSequencia] = useState(gridJogos)
+  const dataEstadoRedux = useSelector((state) => state.jogo)
+  // const gridJogos = dataEstadoRedux.grid// useSelector((state) => state.jogo.grid)
+  const [cartasEmSequencia, setCartasEmSequencia] = useState(dataEstadoRedux.grid)
   const [agrupaCardSelecionados, setAgrupaCardSelecionados] = useState([]) // acumulas os valores das duas cartas
   const [isLoading, setIsLoading] = useState(true)
-  const endGame = useSelector((state) => state.jogo.finalizaJogo)
+  // const endGame = useSelector((state) => dataEstadoRedux.finalizaJogo)
   
-  const arrayJogadores = useSelector((state) => state.jogo.jogadores)
-  const [jogadorDaVez, setJogadorDaVez] = useState(arrayJogadores[0].id)
+  const arrayJogadores = dataEstadoRedux.jogadores
+  const [jogadorDaVez, setJogadorDaVez] = useState(1)
   // const gridJogos = gerarGridAleatorio()
   // const dispatch = useDispatch()
 
@@ -25,6 +26,7 @@ function Canva() {
     if(agrupaCardSelecionados.length < 2 && !agrupaCardSelecionados.includes(position)) {
       setAgrupaCardSelecionados( (prev) => [...prev, position] )
     }
+    
   }
   // useEffect(() => {
   //   setCartasEmSequencia(gridJogos)
@@ -39,15 +41,18 @@ function Canva() {
     // Simula 1s de carregamento
     setIsLoading(true)
     const timeout = setTimeout(() => {
-      setCartasEmSequencia(gridJogos)
+      setCartasEmSequencia(dataEstadoRedux.grid)
+      setAgrupaCardSelecionados([])
+      setJogadorDaVez(1)
       setIsLoading(false)
     }, 300)
     return () => clearTimeout(timeout)
-  }, [gridJogos])
+  }, [dataEstadoRedux.grid])
 
   useEffect(() => {
 
     if(agrupaCardSelecionados.length === 2) {
+      dispatch(contaMovimentos({id: jogadorDaVez}))
       const [posicao1, posicao2] = agrupaCardSelecionados
       const valorDaCarta1 = cartasEmSequencia[posicao1].value
       const valorDaCarta2 = cartasEmSequencia[posicao2].value
@@ -65,7 +70,6 @@ function Canva() {
         dispatch(finalizaJogo())
       }else{
         let indiceJogador = jogadorDaVez + 1
-        
         if( indiceJogador > arrayJogadores.length ) indiceJogador = 1
         setJogadorDaVez(indiceJogador)
       }
@@ -79,11 +83,12 @@ function Canva() {
   if (isLoading) {
     return <p>Carregando...</p>
   }
+  
 
   return (
     <>
       <div className={styles.canva}>
-        {!endGame ? (
+        {!dataEstadoRedux.finalizaJogo ? (
           <>
             <p>{`Vez do jogador ${jogadorDaVez}...`}</p>
             <div className={styles.canvaJogo} 
@@ -103,11 +108,17 @@ function Canva() {
               ))}
             </div>
           </>
-        ) : <p>FIM DE JOGO</p> }
+        ) : (<EndGame jogadores={arrayJogadores} />) }
       </div>
             <footer>
             {arrayJogadores.map( (jogador, index) => (
-              <PlacarPlayer key={index} nomePlayer = {`Jogador ${jogador.id}`} scorePlayer={jogador.score} selectPlayer = {jogador.id === jogadorDaVez}/>
+              <PlacarPlayer 
+                key={index} 
+                nomePlayer = {`Jogador ${jogador.id}`} 
+                scorePlayer={jogador.score} 
+                selectPlayer = {jogador.id === jogadorDaVez}
+                movimentosPlayer = {jogador.movimentos > 0 ?  jogador.movimentos : "" }
+                />
             ))}
             {/* <PlacarPlayer nomePlayer = "Player 3" scorePlayer={6} selectPlayer={true}/> */}
     

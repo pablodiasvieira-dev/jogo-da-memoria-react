@@ -40,8 +40,8 @@ const EstadoInicial = {
     cartas: 4,
     num_jogadores: 2,
     jogadores: [
-        {id: 1, score: 0},
-        {id: 2, score: 0},
+        {id: 1, score: 0, movimentos: 0},
+        {id: 2, score: 0, movimentos: 0},
     ],
     finalizaJogo: false
 }
@@ -58,10 +58,12 @@ const jogosSlice = createSlice({
             state.num_jogadores = jogadores
             state.jogadores = gerarJogadores(jogadores)
             state.grid = gerarGridAleatorio(cartas, jogadores)
+            state.finalizaJogo = false
         },
         reiniciarJogo: (state) => {
             state.grid = gerarGridAleatorio(state.cartas, state.num_jogadores)
             state.jogadores = gerarJogadores(state.num_jogadores)
+            state.finalizaJogo = false
         },
         atribuiPonto: (state, action) => {
             const {id} = action.payload
@@ -77,9 +79,16 @@ const jogosSlice = createSlice({
                 state.finalizaJogo = true
                 console.log("jogo finalizado")
             }
+        },
+        contaMovimentos: (state, action) => {
+            const {id} = action.payload
+            const jogador = state.jogadores.find( j => j.id === id)
+            if( jogador) {
+                jogador.movimentos += 1
+            }
         }
     }
 })
 
-export const {criarNovoJogo, reiniciarJogo, atribuiPonto, finalizaJogo} = jogosSlice.actions
+export const {criarNovoJogo, reiniciarJogo, atribuiPonto, finalizaJogo, contaMovimentos} = jogosSlice.actions
 export default jogosSlice.reducer

@@ -1,7 +1,6 @@
-.placarPlayer {
-    width: 15vw;
+.placarPlayer, .playerSelect{
+    width: 10rem;
     height: 10vh;
-    background-color: rgb(207, 206, 206);
     border: 1px solid #fdfdfd;
     border-radius: 8px;
     display: flex;
@@ -9,18 +8,17 @@
     justify-content: space-evenly;
     align-items: start;
     padding: .2rem .8rem;
+    transition: all 0.3s ease;
+    order: 1;
+}
+
+
+
+.placarPlayer {
+    background-color: rgb(207, 206, 206);
 }
 .playerSelect {
-    width: 15vw;
-    height: 10vh;
     background-color: rgb(243, 181, 57);
-    border: 1px solid #fdfdfd;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: start;
-    padding: .2rem .8rem;
 }
 
 .placarPlayer > h5 {
@@ -43,4 +41,26 @@
     color: rgb(255, 255, 255);
     font-size: 1.3rem;
     font-weight: 700;
+}
+
+@media screen and (max-width: 399px) {
+    .canvaBotoes > div {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        gap: 0;
+    }
+    .btn{
+        width: 8rem;
+    }
+    .playerSelect{
+        order: 0;
+        width: 100%;
+        margin: 0 1rem;
+    }
+}
+@media screen and (min-width: 400px) and (max-width: 600px) {
+    .playerSelect, .placarPlayer {
+        width: 130px;
+    }
 }

@@ -8,6 +8,7 @@
     align-items: center;
     font-weight: bold;
     font-size: 2rem;
+    aspect-ratio: 1 /1;
     
 }
 :is(.cardOculto, .cardSelecionado):hover{

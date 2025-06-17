@@ -1,43 +1,52 @@
 import React, { useEffect, useState } from 'react'
 import Card from '../Card'
 import styles from './Canva.module.css'
-
-function gerarGridAleatorio() {
-  const valores = [];
-  for (let i = 1; i <= 8; i++) {
-    valores.push(i, i); // dois de cada
-  }
-
-  // 2. Embaralha os valores
-  for (let i = valores.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [valores[i], valores[j]] = [valores[j], valores[i]];
-  }
-
-  // 3. Monta o array final com positions de 0 a 15
-  const gridJogos = valores.map((valor, index) => ({
-    position: index,
-    value: valor,
-    status: 'cardOculto',
-  }));
-
-  return gridJogos;
-}
+import { useDispatch, useSelector } from 'react-redux'
+import clsx from 'clsx'
+import { atribuiPonto, finalizaJogo } from '../../redux/jogoSlice'
+import { UseDispatch } from 'react-redux'
+import PlacarPlayer from '../Placar'
 
 function Canva() {
-  const gridJogos = gerarGridAleatorio()
-
+  const dispatch = useDispatch()
+  const gridJogos = useSelector((state) => state.jogo.grid)
   const [cartasEmSequencia, setCartasEmSequencia] = useState(gridJogos)
+  const [agrupaCardSelecionados, setAgrupaCardSelecionados] = useState([]) // acumulas os valores das duas cartas
+  const [isLoading, setIsLoading] = useState(true)
+  const endGame = useSelector((state) => state.jogo.finalizaJogo)
+  
+  const arrayJogadores = useSelector((state) => state.jogo.jogadores)
+  const [jogadorDaVez, setJogadorDaVez] = useState(arrayJogadores[0].id)
+  // const gridJogos = gerarGridAleatorio()
+  // const dispatch = useDispatch()
 
-  const [agrupaCardSelecionados, setAgrupaCardSelecionados] = useState([])
 
   const selecionaUmaCarta = (position) => {
     if(agrupaCardSelecionados.length < 2 && !agrupaCardSelecionados.includes(position)) {
       setAgrupaCardSelecionados( (prev) => [...prev, position] )
     }
   }
+  // useEffect(() => {
+  //   setCartasEmSequencia(gridJogos)
+  // } ,[gridJogos])
+
+  // useEffect(() => {
+  //   // dispatch(criarNovoJogo({cartas: 4, jogadores: 2}))
+  // } ,[dispatch])
+
 
   useEffect(() => {
+    // Simula 1s de carregamento
+    setIsLoading(true)
+    const timeout = setTimeout(() => {
+      setCartasEmSequencia(gridJogos)
+      setIsLoading(false)
+    }, 300)
+    return () => clearTimeout(timeout)
+  }, [gridJogos])
+
+  useEffect(() => {
+
     if(agrupaCardSelecionados.length === 2) {
       const [posicao1, posicao2] = agrupaCardSelecionados
       const valorDaCarta1 = cartasEmSequencia[posicao1].value
@@ -50,8 +59,15 @@ function Canva() {
           }
           return carta
         })
-        console.log(novasCartasReveladas)
+        // console.log(novasCartasReveladas)
         setCartasEmSequencia(novasCartasReveladas)
+        dispatch(atribuiPonto({id: jogadorDaVez}))
+        dispatch(finalizaJogo())
+      }else{
+        let indiceJogador = jogadorDaVez + 1
+        
+        if( indiceJogador > arrayJogadores.length ) indiceJogador = 1
+        setJogadorDaVez(indiceJogador)
       }
       setTimeout(() => {
         setAgrupaCardSelecionados([])
@@ -60,22 +76,45 @@ function Canva() {
 
   },[agrupaCardSelecionados])
 
+  if (isLoading) {
+    return <p>Carregando...</p>
+  }
+
   return (
-    <div className={styles.canva}>
-      <div className={styles.canvaJogo}>
-        {cartasEmSequencia.map( (card, index) => (
-          <Card 
-            key={index} 
-            card={card} 
-            // estaSelecionado = {valorA === card.position}
-            estaSelecionado={agrupaCardSelecionados.includes(card.position)}
-            selecionaCarta={card.status} 
-            fnSelecionaUmaCarta={selecionaUmaCarta}
-          />
-        ))}
+    <>
+      <div className={styles.canva}>
+        {!endGame ? (
+          <>
+            <p>{`Vez do jogador ${jogadorDaVez}...`}</p>
+            <div className={styles.canvaJogo} 
+              style={{
+                gridTemplateRows: `repeat(${ Math.sqrt(cartasEmSequencia.length)}, 5rem)`,
+                gridTemplateColumns: `repeat(${Math.sqrt(cartasEmSequencia.length)}, 5rem)`
+              }}>
+              {cartasEmSequencia.map( (card, index) => (
+                <Card 
+                  key={index} 
+                  card={card} 
+                  // estaSelecionado = {valorA === card.position}
+                  estaSelecionado={agrupaCardSelecionados.includes(card.position)}
+                  selecionaCarta={card.status} 
+                  fnSelecionaUmaCarta={selecionaUmaCarta}
+                />
+              ))}
+            </div>
+          </>
+        ) : <p>FIM DE JOGO</p> }
       </div>
-    </div>
+            <footer>
+            {arrayJogadores.map( (jogador, index) => (
+              <PlacarPlayer key={index} nomePlayer = {`Jogador ${jogador.id}`} scorePlayer={jogador.score} selectPlayer = {jogador.id === jogadorDaVez}/>
+            ))}
+            {/* <PlacarPlayer nomePlayer = "Player 3" scorePlayer={6} selectPlayer={true}/> */}
+    
+          </footer>
+    </>
   )
 }
+
 
 export default Canva
